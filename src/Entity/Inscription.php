@@ -64,4 +64,20 @@ class Inscription
 
         return $this;
     }
+
+    public function __construct(array $init)
+    {
+        $this->hydrate($init);
+    }
+
+    // HYDRATE pour mettre à jour les attributs des entités
+    public function hydrate(array $vals)
+    {
+        foreach ($vals as $key => $value) {
+            $method = "set" . ucfirst($key);
+            if (method_exists($this,$method)){
+                $this->$method($value);
+            }
+        }
+    }
 }

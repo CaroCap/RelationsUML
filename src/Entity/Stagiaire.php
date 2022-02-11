@@ -24,9 +24,21 @@ class Stagiaire
     #[ORM\OneToMany(mappedBy: 'stagiaire', targetEntity: Inscription::class, orphanRemoval: true)]
     private $inscriptions;
 
-    public function __construct()
+    public function __construct(array $init)
     {
+        $this->hydrate($init);
         $this->inscriptions = new ArrayCollection();
+    }
+
+    // HYDRATE pour mettre à jour les attributs des entités
+    public function hydrate(array $vals)
+    {
+        foreach ($vals as $key => $value) {
+            $method = "set" . ucfirst($key);
+            if (method_exists($this,$method)){
+                $this->$method($value);
+            }
+        }
     }
 
     public function getId(): ?int
